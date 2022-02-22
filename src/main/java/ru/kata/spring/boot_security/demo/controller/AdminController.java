@@ -25,8 +25,8 @@ public class AdminController {
         modelAndView.addObject("listOfUsers", userService.listOfUsers());
         User newUser = new User();
         modelAndView.addObject("newUser", newUser);
-        User newUser1 = new User();
-        modelAndView.addObject("someNew", newUser1);
+        User newEditedUser = new User();
+        modelAndView.addObject("newEditedUser", newEditedUser);
         return modelAndView;
     }
 
@@ -43,8 +43,9 @@ public class AdminController {
                                  @RequestParam("editAge") Integer age,
                                  @RequestParam("editEmail") String email,
                                  @RequestParam("editPassword") String password,
-                                 @PathVariable("id") Long id, ModelAndView modelAndView) {
-        userService.edit(roles, firstName, lastName, age, email, password, id);
+                                 @PathVariable("id") Long id, ModelAndView modelAndView,
+                                 @ModelAttribute ("newEditedUser") User newEditedUser) {
+       userService.edit(roles, firstName, lastName, age, email, password, id);
         modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }

@@ -27,11 +27,11 @@ public class MyCommandLIneRunner implements CommandLineRunner {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public void setUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Override
     @Transactional
@@ -43,7 +43,7 @@ public class MyCommandLIneRunner implements CommandLineRunner {
         user.setEmail("user@mail.com");
         user.setAge(30);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        userService.save(user);
+        userRepository.save(user);
 
         User administrator = new User();
         administrator.setPassword(bCryptPasswordEncoder.encode("admin"));
@@ -52,6 +52,6 @@ public class MyCommandLIneRunner implements CommandLineRunner {
         administrator.setAge(90);
         administrator.setEmail("admin@mail.com");
         administrator.setRoles(new HashSet<>(Arrays.asList(new Role(1L, "ROLE_USER"), new Role(2L, "ROLE_ADMIN"))));
-        userService.save(administrator);*/
+        userRepository.save(administrator);*/
     }
 }
