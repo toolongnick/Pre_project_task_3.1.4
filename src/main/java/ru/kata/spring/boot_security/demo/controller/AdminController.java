@@ -25,8 +25,6 @@ public class AdminController {
         modelAndView.addObject("listOfUsers", userService.listOfUsers());
         User newUser = new User();
         modelAndView.addObject("newUser", newUser);
-        User newEditedUser = new User();
-        modelAndView.addObject("newEditedUser", newEditedUser);
         return modelAndView;
     }
 
@@ -37,15 +35,10 @@ public class AdminController {
     }
 
     @PostMapping(value = "/admin/user-edit/{id}")
-    public ModelAndView editUser(@RequestParam("EditListRoles") ArrayList<String> roles,
-                                 @RequestParam("editFirstName") String firstName,
-                                 @RequestParam("editLastName") String lastName,
-                                 @RequestParam("editAge") Integer age,
-                                 @RequestParam("editEmail") String email,
-                                 @RequestParam("editPassword") String password,
-                                 @PathVariable("id") Long id, ModelAndView modelAndView,
-                                 @ModelAttribute ("newEditedUser") User newEditedUser) {
-       userService.edit(roles, firstName, lastName, age, email, password, id);
+    public ModelAndView editUser(@ModelAttribute("user") User user,
+                                 @RequestParam("EditListRoles") ArrayList<String> roles,
+                                 ModelAndView modelAndView) {
+        userService.edit(roles, user);
         modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }

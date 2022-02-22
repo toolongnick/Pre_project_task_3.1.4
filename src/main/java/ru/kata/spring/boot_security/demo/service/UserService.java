@@ -45,15 +45,14 @@ public class UserService  {
         userRepository.deleteById(id);
     }
 
-    public void edit(ArrayList<String> roles, String firstName, String lastName, Integer age, String email, String password, Long id) {
-        User editUser = userRepository.getById(id);
-        editUser.setFirstName(firstName);
-        editUser.setSurname(lastName);
-        editUser.setAge(age);
-        editUser.setEmail(email);
-        editUser.setPassword(password);
+    public void edit(ArrayList<String> roles, User user) {
+        User editUser = userRepository.getById(user.getId());
+        editUser.setFirstName(user.getFirstName());
+        editUser.setSurname(user.getSurname());
+        editUser.setAge(user.getAge());
+        editUser.setEmail(user.getEmail());
+        editUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         setUserRoles(roles, editUser);
-        editUser.setPassword(bCryptPasswordEncoder.encode(password));
         if (editUser.getRoles() == null) {
             editUser.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         }

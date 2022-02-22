@@ -70,24 +70,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="editedUser :${listOfUsers}">
-                                        <td th:text="${editedUser.id}">
-                                            ID
-                                        </td>
-                                        <td th:text="${editedUser.firstName}">
-                                            First Name
-                                        </td>
-                                        <td th:text="${editedUser.surname}">
-                                            Last Name
-                                        </td>
-                                        <td th:text="${editedUser.age}">
-                                            Age
-                                        </td>
-                                        <td th:text="${editedUser.email}">
-                                            Email
-                                        </td>
+                                    <tr th:each="user :${listOfUsers}">
+                                        <td th:text="${user.id}">ID</td>
+                                        <td th:text="${user.firstName}">First Name</td>
+                                        <td th:text="${user.surname}">Last Name</td>
+                                        <td th:text="${user.age}">Age</td>
+                                        <td th:text="${user.email}">Email</td>
                                         <td>
-                                            <a th:each="role : ${editedUser.getAuthorities()}">
+                                            <a th:each="role : ${user.getAuthorities()}">
                                                 <a th:text="${role.authority} == 'ROLE_USER' ? 'USER' : 'ADMIN'">
                                                     A Role</a>
                                                 <a th:text="' '"></a>
@@ -97,21 +87,20 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-primary" data-bs-toggle="modal"
-                                                    th:data-bs-target="${'#editModal' + editedUser.getId()}"
+                                                    th:data-bs-target="${'#editModal' + user.getId()}"
                                             >Edit
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                    th:attr="data-bs-target='#deleteModal' + ${editedUser.getId()} ">Delete
+                                                    th:attr="data-bs-target='#deleteModal' + ${user.getId()} ">Delete
                                             </button>
                                         </td>
                                         <!--Модальное окно для редактирования пользователя-->
-                                        <!--Модальное окно для редактирования пользователя  th:data-bs-target="${'#editModal' + editedUser.id}"-->
-                                        <div class="modal fade" th:id="${'editModal'+ editedUser.getId()}" tabindex="-1"
+                                        <div class="modal fade" th:id="${'editModal'+ user.getId()}" tabindex="-1"
                                              aria-labelledby="exampleModalLabel"
                                              aria-hidden="true">
-                                            <form th:action="@{/admin/user-edit/{id}(id=${editedUser.id})}" method="post">
+                                            <form th:action="@{/admin/user-edit/{id}(id=${user.id})}" method="POST">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -125,16 +114,16 @@
                                                             <div class="form-group mb-3 text-center">
                                                                 <label for="ID" class="form-label fw-bold">ID</label>
                                                                 <input type="text" class="form-control" id="ID"
-                                                                       th:value="${newEditedUser.id}"
-                                                                       th:placeholder="${editedUser.id}"
+                                                                       th:value="${user.id}"
+                                                                       th:placeholder="${user.id}"
                                                                        disabled/>
                                                             </div>
                                                             <div class="form-group mb-3 text-center">
                                                                 <label for="FirstNameEdit" class="form-label fw-bold">First Name</label>
                                                                 <input type="text" class="form-control" id="FirstNameEdit"
-                                                                       th:value="${editedUser.firstName}"
-                                                                       name="editFirstName"
-                                                                       th:placeholder="${editedUser.firstName}"/>
+                                                                       th:value="${user.firstName}"
+                                                                       name="firstName"
+                                                                       th:placeholder="${user.firstName}"/>
                                                             </div>
                                                             <div class="form-group mb-3 text-center">
                                                                 <label for="LastNameEdit"
@@ -142,9 +131,9 @@
                                                                     Name</label>
                                                                 <input type="text" class="form-control"
                                                                        id="LastNameEdit"
-                                                                       th:placeholder="${editedUser.surname}"
-                                                                       name="editLastName"
-                                                                       th:value="${editedUser.surname}"/>
+                                                                       th:placeholder="${user.surname}"
+                                                                       name="surname"
+                                                                       th:value="${user.surname}"/>
                                                             </div>
                                                             <div class="form-group mb-3 text-center">
                                                                 <label for="AgeEdit"
@@ -152,25 +141,25 @@
                                                                 <input type="number" class="form-control"
                                                                        id="AgeEdit"
                                                                        aria-describedby="emailHelp"
-                                                                       th:placeholder="${editedUser.age}" name="editAge"
-                                                                       th:value="${editedUser.age}"/>
+                                                                       th:placeholder="${user.age}" name="age"
+                                                                       th:value="${user.age}"/>
                                                             </div>
                                                             <div class="form-group mb-3 text-center">
                                                                 <label for="EmailEdit"
                                                                        class="form-label fw-bold">Email</label>
                                                                 <input type="email" class="form-control"
                                                                        id="EmailEdit"
-                                                                       th:placeholder="${editedUser.email}"
-                                                                       name="editEmail" th:value="${editedUser.email}"/>
+                                                                       th:placeholder="${user.email}"
+                                                                       name="email" th:value="${user.email}"/>
                                                             </div>
                                                             <div class="form-group mb-3 text-center">
                                                                 <label for="PasswordEdit"
                                                                        class="form-label fw-bold">Password</label>
                                                                 <input type="password" class="form-control"
                                                                        id="PasswordEdit"
-                                                                       name="editPassword"
-                                                                       th:placeholder="${editedUser.password}"
-                                                                       th:value="${editedUser.password}"/>
+                                                                       name="password"
+                                                                       th:placeholder="${user.password}"
+                                                                       th:value="${user.password}"/>
                                                             </div>
                                                             <div class="mb-3 text-center">
                                                                 <label for="EditRoles"
@@ -196,10 +185,10 @@
                                         </div>
 
                                         <!--Модальное окно для удаления пользователя-->
-                                        <div class="modal fade" th:id="deleteModal + ${editedUser.id}" tabindex="-1"
+                                        <div class="modal fade" th:id="deleteModal + ${user.id}" tabindex="-1"
                                              aria-labelledby="DeleteModalLabel"
                                              aria-hidden="true">
-                                            <form th:action="@{/admin/user-delete/{id}(id=${editedUser.id})}"
+                                            <form th:action="@{/admin/user-delete/{id}(id=${user.id})}"
                                                   method="post">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -215,7 +204,7 @@
                                                                 <label for="ID_Delete"
                                                                        class="form-label fw-bold">ID</label>
                                                                 <input type="text" class="form-control"
-                                                                       id="ID_Delete" th:placeholder="${editedUser.id}"
+                                                                       id="ID_Delete" th:placeholder="${user.id}"
                                                                        disabled>
                                                             </div>
                                                             <div class="mb-3 text-center">
@@ -224,7 +213,7 @@
                                                                     Name</label>
                                                                 <input type="text" class="form-control"
                                                                        id="FirstNameDelete"
-                                                                       th:placeholder="${editedUser.firstName}"
+                                                                       th:placeholder="${user.firstName}"
                                                                        disabled>
                                                             </div>
                                                             <div class="mb-3 text-center">
@@ -233,14 +222,14 @@
                                                                     Name</label>
                                                                 <input type="text" class="form-control"
                                                                        id="LastNameDelete"
-                                                                       th:placeholder="${editedUser.surname}"
+                                                                       th:placeholder="${user.surname}"
                                                                        disabled>
                                                             </div>
                                                             <div class="mb-3 text-center">
                                                                 <label for="AgeDelete"
                                                                        class="form-label fw-bold">Age</label>
                                                                 <input type="number" class="form-control"
-                                                                       id="AgeDelete" th:placeholder="${editedUser.age}"
+                                                                       id="AgeDelete" th:placeholder="${user.age}"
                                                                        aria-describedby="emailHelp"
                                                                        disabled>
                                                             </div>
@@ -249,7 +238,7 @@
                                                                        class="form-label fw-bold">Email</label>
                                                                 <input type="email" class="form-control"
                                                                        id="EmailDelete"
-                                                                       th:placeholder="${editedUser.email}"
+                                                                       th:placeholder="${user.email}"
                                                                        disabled>
                                                             </div>
                                                             <div class="mb-3 text-center">
