@@ -10,6 +10,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.util.ArrayList;
 
 @Controller
+
 public class UserController {
 
     private UserService userService;

@@ -32,7 +32,7 @@ public class UserService  {
     }
 
     @Transactional
-    public void save(User newUser, ArrayList<String> roles) {
+    public void save(User newUser, List<String> roles) {
         setUserRoles(roles, newUser);
         newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         if (newUser.getRoles() == null) {
@@ -45,7 +45,7 @@ public class UserService  {
         userRepository.deleteById(id);
     }
 
-    public void edit(ArrayList<String> roles, User user) {
+    public void edit(User user, List<String> roles ) {
         User editUser = userRepository.getById(user.getId());
         editUser.setFirstName(user.getFirstName());
         editUser.setSurname(user.getSurname());
@@ -70,7 +70,7 @@ public class UserService  {
     }
 
 
-    private void setUserRoles(@RequestParam("EditListRoles") ArrayList<String> roles, User editUser) {
+    private void setUserRoles(@RequestParam("EditListRoles") List<String> roles, User editUser) {
         Set<Role> editRoles = new HashSet<>();
         for (String role : roles) {
             editRoles.add(new Role(role.equals("ROLE_USER") ? 1L : 2L, role.equals("ROLE_USER") ? "ROLE_USER" : "ROLE_ADMIN"));

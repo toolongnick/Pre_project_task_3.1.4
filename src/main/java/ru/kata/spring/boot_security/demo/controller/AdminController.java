@@ -38,7 +38,7 @@ public class AdminController {
     public ModelAndView editUser(@ModelAttribute("user") User user,
                                  @RequestParam("EditListRoles") ArrayList<String> roles,
                                  ModelAndView modelAndView) {
-        userService.edit(roles, user);
+        userService.edit(user, roles);
         modelAndView.setViewName("redirect:/admin");
         return modelAndView;
     }
