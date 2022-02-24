@@ -166,9 +166,14 @@
                                                                        class="form-label fw-bold">Role</label>
                                                                 <select id="EditRoles" name="EditListRoles"
                                                                         class="form-select" size="2"
-                                                                        aria-label="size 2 select example" multiple>
-                                                                    <option selected value="ROLE_USER">USER</option>
-                                                                    <option value="ROLE_ADMIN">ADMIN</option>
+                                                                        aria-label="select example" multiple>
+<!--                                                                    <option th:each="role:${user.roles}"
+                                                                            th:value="${role.getRole()}"
+                                                                            th:text="${#strings.substringAfter(role.getRole().toUpperCase(),
+                                                                             'ROLE_')}"
+                                                                            th:selected="${user.getRoles().contains(role)}"></option>-->
+                                                                    <option value="ROLE_USER">USER</option >
+                                                                    <option value="ROLE_ADMIN">ADMIN</option >
                                                                 </select>
                                                             </div>
                                                         </div>
