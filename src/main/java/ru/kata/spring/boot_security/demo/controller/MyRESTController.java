@@ -1,11 +1,13 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,33 +27,26 @@ public class MyRESTController {
         return userService.listOfUsers();
     }
 
-    @GetMapping("/people/{id}")
-    public User getUser(@PathVariable("id") Long id) {
-        return userService.getUserById(id);
+    @GetMapping("/people/loggedUser")
+    public User getUser(Principal principal) {
+        return userService.findUserByEmail(principal.getName());
     }
 
     @PostMapping("/people")
     public User saveUser(@RequestBody User user) {
-        List<String> roles = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            roles.add(role.getRole());
-        }
-        userService.save(user, roles);
+        userService.save(user, null);
         return user;
     }
 
     @PutMapping("/people")
     public User editUser(@RequestBody User user) {
-        List<String> roles = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            roles.add(role.getRole());
-        }
-        userService.edit(user, roles);
+        userService.edit(user, null);
         return user;
     }
 
     @DeleteMapping("/people/{id}")
-    public void deleteUser (@PathVariable Long id){
+    public List<User> deleteUser (@PathVariable Long id){
         userService.remove(id);
+        return userService.listOfUsers();
     }
 }

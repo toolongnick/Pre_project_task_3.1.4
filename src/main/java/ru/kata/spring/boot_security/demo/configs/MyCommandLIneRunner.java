@@ -38,18 +38,18 @@ public class MyCommandLIneRunner implements CommandLineRunner {
     public void run(String... args) {
 /*        User user = new User();
         user.setPassword(bCryptPasswordEncoder.encode("user"));
-        user.setFirstName("Сергей");
+        user.setFirstName("Александр");
         user.setSurname("Сергеев");
         user.setEmail("user@mail.com");
-        user.setAge(30);
+        user.setAge(3);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         userRepository.save(user);
 
         User administrator = new User();
         administrator.setPassword(bCryptPasswordEncoder.encode("admin"));
         administrator.setFirstName("Иван");
-        administrator.setSurname("Иванов");
-        administrator.setAge(90);
+        administrator.setSurname("Леванов");
+        administrator.setAge(43);
         administrator.setEmail("admin@mail.com");
         administrator.setRoles(new HashSet<>(Arrays.asList(new Role(1L, "ROLE_USER"), new Role(2L, "ROLE_ADMIN"))));
         userRepository.save(administrator);*/

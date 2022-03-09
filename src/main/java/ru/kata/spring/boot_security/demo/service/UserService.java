@@ -33,7 +33,9 @@ public class UserService  {
 
     @Transactional
     public void save(User newUser, List<String> roles) {
-        setUserRoles(roles, newUser);
+        if (!(roles == null)) {
+            setUserRoles(roles, newUser);
+        }
         newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         if (newUser.getRoles() == null) {
             newUser.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
@@ -47,14 +49,17 @@ public class UserService  {
 
     public void edit(User user, List<String> roles ) {
         User editUser = userRepository.getById(user.getId());
+
         editUser.setFirstName(user.getFirstName());
         editUser.setSurname(user.getSurname());
         editUser.setAge(user.getAge());
         editUser.setEmail(user.getEmail());
         editUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        setUserRoles(roles, editUser);
-        if (editUser.getRoles() == null) {
-            editUser.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        if (!(roles == null)) {
+            setUserRoles(roles, editUser);
+        }
+        else {
+            editUser.setRoles(user.getRoles());
         }
         userRepository.save(editUser);
     }
