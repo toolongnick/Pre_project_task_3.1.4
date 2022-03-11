@@ -10,29 +10,34 @@ let userRoles = (user) => {
     return `<td>` + `<a>${roleInnerHTML}</a>` + `</td>`
 }
 
-let output = ''
-fetch(URL)
-    .then(res => res.json())
-    .then(data => {
-        data.forEach(user => {
-            output += `<tr>
+
+let insertedTRFunc = (user) => {
+    return `<tr id="${user.id}">
                            <td id="allUsersID" >${user.id}</td>
                            <td id="allUsersFN">${user.firstName}</td>
                            <td id="allUsersLN">${user.surname}</td>
                            <td id="allUsersAge">${user.age}</td>
                            <td id="allUsersPassword" hidden>${user.password}</td>
                            <td id="allUsersEmail">${user.email}</td>`
-                +
-                userRoles(user)
-                +
-                `<td><button type="button" class="editBtn btn btn-primary">Edit</button></td>
+        +
+        userRoles(user)
+        +
+        `<td><button type="button" class="editBtn btn btn-primary">Edit</button></td>
                            <td><button type="button" class="deleteBtn btn btn-danger">Delete</button></td>
                     </tr>`
+}
 
+function fetchMethod() {
+    let tableOutput = ''
+    fetch(URL)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(user => {
+                tableOutput +=  insertedTRFunc(user)
+            })
+            tableBody.innerHTML = tableOutput
         })
-        tableBody.innerHTML = output
-    })
-
+}
 
 const on = (element, event, selector, handler) => {
     element.addEventListener(event, e => {
@@ -41,6 +46,20 @@ const on = (element, event, selector, handler) => {
         }
     })
 }
+
+function selectedOptions() {
+    const selects = document.querySelector('.editModalSelect')
+    let editFinalRoles = []
+    const selectedValues = [].filter.call(selects.options, option => option.selected)
+        .map(option => option.text)
+    selectedValues.forEach((chosen) => {
+        chosen === 'USER' ? editFinalRoles.push({id:1, role:"ROLE_USER"}) : editFinalRoles.push({id:2, role:"ROLE_ADMIN"})
+    })
+    return editFinalRoles
+}
+
+//TO FILL OUT THE MAIN TABLE
+fetchMethod()
 
 //TO DELETE A USER
 let deleteID
@@ -75,10 +94,21 @@ on(document, 'click', '.deleteBtn', async e => {
 })
 
 on(document, 'click', '.delModalBtn', async e => {
+    e.preventDefault()
+    let tableOutput = ''
     fetch(URL + deleteID, {
         method: 'DELETE'
     })
-        .then(res => res.json())
+        .then(res => {res.json()
+            .then(data => {
+               data.forEach(user => {
+                  tableOutput += insertedTRFunc(user)
+               })
+                tableBody.innerHTML = tableOutput
+                console.log(tableBody)
+            })
+        })
+    deleteModal.hide()
 })
 
 
@@ -90,7 +120,6 @@ function modalRoles(deleteRoles) {
     return options
 }
 
-
 //TO EDIT A USER
 let editID
 const editModal = new bootstrap.Modal(document.querySelector('#editModal'));
@@ -98,6 +127,7 @@ let ID_Edit, FirstNameEdit, LastNameEdit, AgeEdit, EmailEdit, PasswordEdit
 
 on(document, 'click', '.editBtn', async e => {
     e.preventDefault()
+    editModal.show()
     const editTableTag = e.target.parentNode.parentNode
     editID = editTableTag.firstElementChild.innerHTML
     const editFN = editTableTag.querySelector('#allUsersFN').innerHTML
@@ -119,19 +149,11 @@ on(document, 'click', '.editBtn', async e => {
     AgeEdit.value = editAge
     EmailEdit.value = editEmail
     PasswordEdit.value = editPassword
-    editModal.show()
 })
 
 on(document, 'click', '.editModalBtn', async e => {
     e.preventDefault()
-    const selects = document.querySelector('.editModalSelect')
-    let editFinalRoles = []
-    const selectedValues = [].filter.call(selects.options, option => option.selected)
-        .map(option => option.text)
-    selectedValues.forEach((chosen) => {
-        chosen === 'USER' ? editFinalRoles.push({id:1, role:"ROLE_USER"}) : editFinalRoles.push({id:2, role:"ROLE_ADMIN"})
-    })
-
+    let tableOutput = ''
     fetch(URL, {
         method: 'PUT',
         headers: {
@@ -144,14 +166,19 @@ on(document, 'click', '.editModalBtn', async e => {
             firstName:FirstNameEdit.value,
             surname:LastNameEdit.value,
             age:AgeEdit.value,
-            roles:editFinalRoles
+            roles:selectedOptions()
         })
     })
-        .then(res => res.json())
-        .then(() => location.reload())
+        .then(res => {res.json()
+            .then(data => {
+                data.forEach(user => {
+                    tableOutput += insertedTRFunc(user)
+                })
+                tableBody.innerHTML = tableOutput
+            })
+        })
+    editModal.hide()
 })
-
-
 
 
 //TO CREATE USER
@@ -171,34 +198,41 @@ createNewUserTab.addEventListener('click', e => {
     passwordCreate.value = ''
 })
 
-on(document, 'click', '.createNewUser', async c => {
-
-    c.preventDefault()
+on(document, 'click', '.createNewUser', async e => {
+    e.preventDefault()
     const createSelect = document.querySelector('.createSelect')
+
     let editFinalRoles = []
     const createSelectVal = [].filter.call(createSelect.options, option => option.selected)
         .map(option => option.text)
     createSelectVal.forEach((chosen) => {
         chosen === 'USER' ? editFinalRoles.push({id:1, role:"ROLE_USER"}) : editFinalRoles.push({id:2, role:"ROLE_ADMIN"})
     })
-
+    let tableOutput = ''
     fetch(URL, {
         method: 'POST',
         headers: {
-            'Content-Type':'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            email:emailCreate.value,
-            password:passwordCreate.value,
-            firstName:firstNameCreate.value,
-            surname:lastNameCreate.value,
-            age:ageCreate.value,
-            roles:editFinalRoles
+            email: emailCreate.value,
+            password: passwordCreate.value,
+            firstName: firstNameCreate.value,
+            surname: lastNameCreate.value,
+            age: ageCreate.value,
+            roles: editFinalRoles
         })
-    })
-        .then(res => res.json())
-        .then(() => location.reload())
-
+    }).then(res => res.json())
+        .then(data => {
+            data.forEach(user => {
+                tableOutput += insertedTRFunc(user)
+            })
+            tableBody.innerHTML = tableOutput
+            console.log(tableBody)
+        })
+    let usersTable = document.querySelector('#nav-home-tab')
+    let tab = new bootstrap.Tab(usersTable)
+    tab.show()
 })
 
 
@@ -222,7 +256,6 @@ fetch(URL + 'loggedUser', {
                            <td>${user.age}</td>
                            <td>${user.email}</td>`
             + userRoles(user) + `</tr>`
-        console.log(tableLoggedAdmin)
     })
 
 

@@ -33,15 +33,15 @@ public class MyRESTController {
     }
 
     @PostMapping("/people")
-    public User saveUser(@RequestBody User user) {
+    public List<User> saveUser(@RequestBody User user) {
         userService.save(user, null);
-        return user;
+        return userService.listOfUsers();
     }
 
     @PutMapping("/people")
-    public User editUser(@RequestBody User user) {
+    public List<User> editUser(@RequestBody User user) {
         userService.edit(user, null);
-        return user;
+        return userService.listOfUsers();
     }
 
     @DeleteMapping("/people/{id}")
