@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.configs;
+package ru.kata.spring.boot_security.demo.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,18 +8,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.kata.spring.boot_security.demo.security.SuccessUserHandler;
 import ru.kata.spring.boot_security.demo.service.UserDetailServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-        private final SuccessUserHandler successUserHandler;
+    private final SuccessUserHandler successUserHandler;
 
-            @Autowired
-            public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-                this.successUserHandler = successUserHandler;
-            }
+    @Autowired
+    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+        this.successUserHandler = successUserHandler;
+    }
 
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -27,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    UserDetailServiceImpl userDetailService(){
+    UserDetailServiceImpl userDetailService() {
         return new UserDetailServiceImpl();
     }
 
@@ -37,8 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/user", "/api/people/loggedUser").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/api/people/**").hasRole("ADMIN")
+                .antMatchers("/api/people/loggedUser").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/user").not().hasRole("ADMIN")
+                .antMatchers("/admin", "/api/people/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

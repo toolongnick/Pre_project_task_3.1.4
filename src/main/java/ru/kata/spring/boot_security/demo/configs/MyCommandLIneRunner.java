@@ -5,11 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.RoleRepository;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,22 +34,24 @@ public class MyCommandLIneRunner implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-/*        User user = new User();
-        user.setPassword(bCryptPasswordEncoder.encode("1user"));
-        user.setFirstName("Александр");
-        user.setSurname("Сергеев");
-        user.setEmail("1user@mail.com");
-        user.setAge(3);
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        userRepository.save(user);
+        if (userRepository.findAll().size() == 0) {
+            User user = new User();
+            user.setPassword(bCryptPasswordEncoder.encode("user"));
+            user.setFirstName("Александр");
+            user.setSurname("Сергеев");
+            user.setEmail("user@mail.com");
+            user.setAge(3);
+            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+            userRepository.save(user);
 
-        User administrator = new User();
-        administrator.setPassword(bCryptPasswordEncoder.encode("1admin"));
-        administrator.setFirstName("Иван");
-        administrator.setSurname("Леванов");
-        administrator.setAge(43);
-        administrator.setEmail("1admin@mail.com");
-        administrator.setRoles(new HashSet<>(Arrays.asList(new Role(1L, "ROLE_USER"), new Role(2L, "ROLE_ADMIN"))));
-        userRepository.save(administrator);*/
+            User administrator = new User();
+            administrator.setPassword(bCryptPasswordEncoder.encode("admin"));
+            administrator.setFirstName("Иван");
+            administrator.setSurname("Леванов");
+            administrator.setAge(43);
+            administrator.setEmail("admin@mail.com");
+            administrator.setRoles(new HashSet<>(Arrays.asList(new Role(1L, "ROLE_USER"), new Role(2L, "ROLE_ADMIN"))));
+            userRepository.save(administrator);
+        }
     }
 }

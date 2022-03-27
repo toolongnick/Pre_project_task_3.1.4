@@ -238,7 +238,7 @@ on(document, 'click', '.createNewUser', async e => {
 
 
 // INFO OF LOGGED USER
-let tableLoggedAdmin = document.querySelector('.loggedAdmin')
+let tableLoggedAdmin = document.querySelector('.loggedUser')
 let usernameLogged = document.querySelector('.spanLoggedUser')
 let rolesLoggedAdmin = document.querySelector('.authRoles')
 

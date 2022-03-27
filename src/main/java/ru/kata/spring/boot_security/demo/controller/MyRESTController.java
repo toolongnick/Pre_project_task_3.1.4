@@ -1,14 +1,11 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,11 +13,11 @@ import java.util.List;
 public class MyRESTController {
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public void setUserService(UserServiceImpl userServiceImpl) {
+        this.userService = userServiceImpl;
     }
 
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @GetMapping("/people")
     public List<User> getAllUsers() {
@@ -34,13 +31,13 @@ public class MyRESTController {
 
     @PostMapping("/people")
     public List<User> saveUser(@RequestBody User user) {
-        userService.save(user, null);
+        userService.save(user);
         return userService.listOfUsers();
     }
 
     @PutMapping("/people")
     public List<User> editUser(@RequestBody User user) {
-        userService.edit(user, null);
+        userService.edit(user);
         return userService.listOfUsers();
     }
 

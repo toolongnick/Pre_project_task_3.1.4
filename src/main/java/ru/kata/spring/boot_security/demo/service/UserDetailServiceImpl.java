@@ -13,8 +13,8 @@ import ru.kata.spring.boot_security.demo.model.User;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public void setUserService(UserServiceImpl userServiceImpl) {
+        this.userService = userServiceImpl;
     }
 
     private UserService userService;

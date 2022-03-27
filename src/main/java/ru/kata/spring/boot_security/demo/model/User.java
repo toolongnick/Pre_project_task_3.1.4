@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "person")
+@NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements UserDetails {
 
     @Id
@@ -36,11 +37,12 @@ public class User implements UserDetails {
     @Column(name = "Age")
     private Integer age;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany
     @JoinTable(name = "person_roles",
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<Role> roles;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
