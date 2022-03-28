@@ -27,15 +27,15 @@ let insertedTRFunc = (user) => {
                     </tr>`
 }
 
-function fetchMethod() {
-    let tableOutput = ''
+let basicTableOutput = ''
+function fetchAllUsers() {
     fetch(URL)
         .then(res => res.json())
         .then(data => {
             data.forEach(user => {
-                tableOutput +=  insertedTRFunc(user)
+                basicTableOutput +=  insertedTRFunc(user)
             })
-            tableBody.innerHTML = tableOutput
+            tableBody.innerHTML = basicTableOutput
         })
 }
 
@@ -59,7 +59,7 @@ function selectedOptions() {
 }
 
 //TO FILL OUT THE MAIN TABLE
-fetchMethod()
+fetchAllUsers()
 
 //TO DELETE A USER
 let deleteID
@@ -95,17 +95,16 @@ on(document, 'click', '.deleteBtn', async e => {
 
 on(document, 'click', '.delModalBtn', async e => {
     e.preventDefault()
-    let tableOutput = ''
     fetch(URL + deleteID, {
         method: 'DELETE'
     })
         .then(res => {res.json()
             .then(data => {
-               data.forEach(user => {
-                  tableOutput += insertedTRFunc(user)
-               })
-                tableBody.innerHTML = tableOutput
-                console.log(tableBody)
+                if(data === "OK") {
+                    let element = document.getElementById(deleteID)
+                    element.parentNode.removeChild(element)
+                    tableBody = document.querySelector('.allUsers')
+                }
             })
         })
     deleteModal.hide()
@@ -153,7 +152,7 @@ on(document, 'click', '.editBtn', async e => {
 
 on(document, 'click', '.editModalBtn', async e => {
     e.preventDefault()
-    let tableOutput = ''
+
     fetch(URL, {
         method: 'PUT',
         headers: {
@@ -171,10 +170,11 @@ on(document, 'click', '.editModalBtn', async e => {
     })
         .then(res => {res.json()
             .then(data => {
-                data.forEach(user => {
-                    tableOutput += insertedTRFunc(user)
-                })
-                tableBody.innerHTML = tableOutput
+                let replaced = document.getElementById(editID)
+                const replacing = document.createElement('tr');
+                replacing.id = editID
+                replacing.innerHTML = insertedTRFunc(data)
+                replaced.parentNode.replaceChild(replacing, replaced)
             })
         })
     editModal.hide()
@@ -200,6 +200,7 @@ createNewUserTab.addEventListener('click', e => {
 
 on(document, 'click', '.createNewUser', async e => {
     e.preventDefault()
+
     const createSelect = document.querySelector('.createSelect')
 
     let editFinalRoles = []
@@ -208,7 +209,7 @@ on(document, 'click', '.createNewUser', async e => {
     createSelectVal.forEach((chosen) => {
         chosen === 'USER' ? editFinalRoles.push({id:1, role:"ROLE_USER"}) : editFinalRoles.push({id:2, role:"ROLE_ADMIN"})
     })
-    let tableOutput = ''
+
     fetch(URL, {
         method: 'POST',
         headers: {
@@ -223,12 +224,8 @@ on(document, 'click', '.createNewUser', async e => {
             roles: editFinalRoles
         })
     }).then(res => res.json())
-        .then(data => {
-            data.forEach(user => {
-                tableOutput += insertedTRFunc(user)
-            })
-            tableBody.innerHTML = tableOutput
-            console.log(tableBody)
+        .then(user => {
+            tableBody.innerHTML = tableBody.innerHTML + insertedTRFunc(user)
         })
     let usersTable = document.querySelector('#nav-home-tab')
     let tab = new bootstrap.Tab(usersTable)
