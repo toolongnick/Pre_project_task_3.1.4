@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.kata.spring.boot_security.demo.security.SuccessUserHandler;
 import ru.kata.spring.boot_security.demo.service.UserDetailServiceImpl;
 
 @Configuration
@@ -23,12 +22,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    UserDetailServiceImpl userDetailService() {
+    public UserDetailServiceImpl userDetailService() {
         return new UserDetailServiceImpl();
     }
 
@@ -39,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/api/people/loggedUser").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/user").not().hasRole("ADMIN")
+                .antMatchers("/user").hasRole("USER")
                 .antMatchers("/admin", "/api/people/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

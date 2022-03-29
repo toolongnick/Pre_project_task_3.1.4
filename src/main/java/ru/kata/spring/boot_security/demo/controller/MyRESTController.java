@@ -1,15 +1,13 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+import ru.kata.spring.boot_security.demo.security.UserServiceImpl;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -30,22 +28,23 @@ public class MyRESTController {
     }
 
     @GetMapping("/people/loggedUser")
-    public ResponseEntity<UserDetails> getUser(Principal principal) {
-        return userService.findUserByEmail(principal.getName());
+    public ResponseEntity<User> getUser(Principal principal) {
+        return new ResponseEntity<>(userService.findUserByEmail(principal.getName()), HttpStatus.OK);
     }
 
     @PostMapping("/people")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
-        return userService.save(user);
+        return new ResponseEntity<>(userService.save(user),HttpStatus.OK);
     }
 
     @PutMapping("/people")
     public ResponseEntity<User> editUser(@RequestBody User user) {
-        return userService.edit(user);
+        return new ResponseEntity<>(userService.edit(user), HttpStatus.OK);
     }
 
     @DeleteMapping("/people/{id}")
-    public HttpStatus deleteUser (@PathVariable Long id){
-        return userService.remove(id);
+    public ResponseEntity<HttpStatus> deleteUser (@PathVariable Long id){
+        if(userService.remove(id) == 1)  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

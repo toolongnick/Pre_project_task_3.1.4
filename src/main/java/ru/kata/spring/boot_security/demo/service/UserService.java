@@ -8,9 +8,9 @@ import ru.kata.spring.boot_security.demo.model.User;
 import java.util.List;
 
 public interface UserService {
-    ResponseEntity<UserDetails> findUserByEmail (String email);
-    ResponseEntity<User> save(User newUser);
-    HttpStatus remove(Long id);
-    ResponseEntity<User> edit(User user);
+    User findUserByEmail (String email);
+    User save(User newUser);
+    Integer remove(Long id);
+    User edit(User user);
     List<User> listOfUsers();
 }
