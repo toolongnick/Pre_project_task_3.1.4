@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.security.UserServiceImpl;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import java.security.Principal;
 import java.util.List;
@@ -44,7 +44,7 @@ public class MyRESTController {
 
     @DeleteMapping("/people/{id}")
     public ResponseEntity<HttpStatus> deleteUser (@PathVariable Long id){
-        if(userService.remove(id) == 1)  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(HttpStatus.OK);
+        userService.remove(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
